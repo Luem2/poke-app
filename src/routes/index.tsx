@@ -1,8 +1,14 @@
 import { $, component$, useSignal } from '@builder.io/qwik'
 import type { DocumentHead } from '@builder.io/qwik-city'
+import { PokemonImage } from '~/components/pokemons/pokemon-image'
 
 export default component$(() => {
     const pokemonId = useSignal(1) // datos primitivos (booleans, strings, numbers)
+    const showBackImage = useSignal(false)
+
+    const changePokemonPosition = $(() => {
+        showBackImage.value = !showBackImage.value
+    })
 
     const changePokemonId = $((value: number) => {
         if (pokemonId.value + value <= 0) return
@@ -18,11 +24,9 @@ export default component$(() => {
                     {pokemonId.value}
                 </span>
 
-                <img
-                    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonId.value}.png`}
-                    alt='Pokemon Sprite'
-                    width={200}
-                    height={200}
+                <PokemonImage
+                    id={pokemonId.value}
+                    backImage={showBackImage.value}
                 />
 
                 <div class='flex justify-center mt-2'>
@@ -39,6 +43,13 @@ export default component$(() => {
                         }}
                     >
                         Siguiente
+                    </button>
+
+                    <button
+                        class='btn btn-primary ml-2'
+                        onClick$={changePokemonPosition}
+                    >
+                        Voltear
                     </button>
                 </div>
             </section>
