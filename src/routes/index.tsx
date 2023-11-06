@@ -5,10 +5,7 @@ import { PokemonImage } from '~/components/pokemons/pokemon-image'
 export default component$(() => {
     const pokemonId = useSignal(1) // datos primitivos (booleans, strings, numbers)
     const showBackImage = useSignal(false)
-
-    const changePokemonPosition = $(() => {
-        showBackImage.value = !showBackImage.value
-    })
+    const isVisible = useSignal(true)
 
     const changePokemonId = $((value: number) => {
         if (pokemonId.value + value <= 0) return
@@ -27,6 +24,7 @@ export default component$(() => {
                 <PokemonImage
                     id={pokemonId.value}
                     backImage={showBackImage.value}
+                    isVisible={isVisible.value}
                 />
 
                 <div class='flex justify-center mt-2'>
@@ -47,9 +45,20 @@ export default component$(() => {
 
                     <button
                         class='btn btn-primary ml-2'
-                        onClick$={changePokemonPosition}
+                        onClick$={() => {
+                            showBackImage.value = !showBackImage.value
+                        }}
                     >
                         Voltear
+                    </button>
+
+                    <button
+                        class='btn btn-primary ml-2'
+                        onClick$={() => {
+                            isVisible.value = !isVisible.value
+                        }}
+                    >
+                        Revelar
                     </button>
                 </div>
             </section>

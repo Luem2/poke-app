@@ -4,10 +4,11 @@ interface Props {
     id: number
     size?: number
     backImage?: boolean
+    isVisible?: boolean
 }
 
 export const PokemonImage = component$(
-    ({ id, size = 200, backImage = false }: Props) => {
+    ({ id, size = 200, backImage = false, isVisible = true }: Props) => {
         const baseUrl =
             'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'
         const imageLoaded = useSignal(false)
@@ -33,9 +34,13 @@ export const PokemonImage = component$(
                     src={baseUrl.concat(
                         backImage ? `back/${id}.png` : `${id}.png`
                     )}
-                    class={{
-                        hidden: !imageLoaded.value,
-                    }}
+                    class={[
+                        {
+                            'hidden': !imageLoaded.value,
+                            'brightness-0': !isVisible,
+                        },
+                        'transition-all',
+                    ]}
                     alt='Pokemon Sprite'
                     onLoad$={() => {
                         setTimeout(() => {
