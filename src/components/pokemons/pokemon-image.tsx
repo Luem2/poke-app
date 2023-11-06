@@ -1,4 +1,6 @@
-import { component$, useSignal, useTask$ } from '@builder.io/qwik'
+import { $, component$, useSignal, useTask$ } from '@builder.io/qwik'
+import { useNavigate } from '@builder.io/qwik-city'
+// import { Link } from '@builder.io/qwik-city'
 
 interface Props {
     id: number
@@ -12,12 +14,17 @@ export const PokemonImage = component$(
         const baseUrl =
             'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'
         const imageLoaded = useSignal(false)
+        const nav = useNavigate()
 
         useTask$(({ track }) => {
             // el track sirve para seguir el valor
             track(() => id)
 
             imageLoaded.value = false
+        })
+
+        const goToPokemonPage = $((id: number) => {
+            nav(`/pokemon/${id}`)
         })
 
         return (
@@ -30,16 +37,20 @@ export const PokemonImage = component$(
             >
                 {!imageLoaded.value && <span>Cargando...</span>}
 
+                {/* <Link href={`/pokemon/${id}`}> */}
+
                 <img
                     src={baseUrl.concat(
                         backImage ? `back/${id}.png` : `${id}.png`
                     )}
+                    onClick$={() => goToPokemonPage(id)}
                     class={[
                         {
                             'hidden': !imageLoaded.value,
                             'brightness-0': !isVisible,
                         },
                         'transition-all',
+                        'cursor-pointer',
                     ]}
                     alt='Pokemon Sprite'
                     onLoad$={() => {
@@ -50,6 +61,7 @@ export const PokemonImage = component$(
                     width={size}
                     height={size}
                 />
+                {/* </Link> */}
             </div>
         )
     }
