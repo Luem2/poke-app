@@ -28,7 +28,7 @@ export default component$(() => {
     return (
         <>
             <Navbar />
-            <main>
+            <main class='flex flex-col justify-center items-center'>
                 <Slot />
             </main>
         </>
