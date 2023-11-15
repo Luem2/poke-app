@@ -1,4 +1,10 @@
-import { $, component$, useSignal, useTask$ } from '@builder.io/qwik'
+import {
+    $,
+    component$,
+    useComputed$,
+    useSignal,
+    useTask$,
+} from '@builder.io/qwik'
 import { useNavigate } from '@builder.io/qwik-city'
 // import { Link } from '@builder.io/qwik-city'
 
@@ -14,6 +20,11 @@ export const PokemonImage = component$(
         const baseUrl =
             'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'
         const imageLoaded = useSignal(false)
+        const imageUrl = useComputed$(() => {
+            return backImage
+                ? baseUrl.concat(`back/${id}.png`)
+                : baseUrl.concat(`${id}.png`)
+        })
         const nav = useNavigate()
 
         useTask$(({ track }) => {
@@ -40,9 +51,7 @@ export const PokemonImage = component$(
                 {/* <Link href={`/pokemon/${id}`}> */}
 
                 <img
-                    src={baseUrl.concat(
-                        backImage ? `back/${id}.png` : `${id}.png`
-                    )}
+                    src={imageUrl.value}
                     onClick$={() => goToPokemonPage(id)}
                     class={[
                         {
