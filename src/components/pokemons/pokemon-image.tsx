@@ -63,9 +63,10 @@ export const PokemonImage = component$(
                     ]}
                     alt='Pokemon Sprite'
                     onLoad$={() => {
-                        setTimeout(() => {
-                            imageLoaded.value = true
-                        }, 1000)
+                        imageLoaded.value = true
+                        // setTimeout(() => {
+                        //     imageLoaded.value = true
+                        // }, 1000)
                     }}
                     width={size}
                     height={size}

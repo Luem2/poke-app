@@ -1,7 +1,5 @@
-import {
-    PokemonGameContext,
-    type PokemonGameState,
-} from '~/context/pokemon/pokemon-game.context'
+import type { PokemonGameState, PokemonListState } from '~/context'
+
 import {
     component$,
     Slot,
@@ -10,8 +8,8 @@ import {
     useStyles$,
 } from '@builder.io/qwik'
 
+import { PokemonGameContext, PokemonListContext } from '~/context'
 import Navbar from '~/components/shared/navbar/navbar'
-
 import styles from './styles.css?inline'
 
 export default component$(() => {
@@ -23,7 +21,14 @@ export default component$(() => {
         isVisible: true,
     })
 
+    const pokemonList = useStore<PokemonListState>({
+        currentPage: 0,
+        isLoading: false,
+        pokemons: [],
+    })
+
     useContextProvider(PokemonGameContext, pokemonGame)
+    useContextProvider(PokemonListContext, pokemonList)
 
     return (
         <>
