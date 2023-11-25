@@ -1,6 +1,7 @@
-import { component$ } from '@builder.io/qwik'
+import { component$, useContext } from '@builder.io/qwik'
 import { routeLoader$ } from '@builder.io/qwik-city'
 import { PokemonImage } from '~/components/pokemons/pokemon-image'
+import { PokemonGameContext } from '~/context/pokemon/pokemon-game.context'
 
 export const usePokemonId = routeLoader$<number>(({ params, redirect }) => {
     const id = Number(params.id)
@@ -19,13 +20,23 @@ export default component$(() => {
     // const location = useLocation()
     const pokemonId = usePokemonId()
 
+    const pokemonGame = useContext(PokemonGameContext)
+
     return (
         <>
             {/* <h1>Pokemon id: {id}</h1> */}
             {/* <h1>Pokemon id: {location.params.id}</h1>
             <PokemonImage id={+location.params.id} /> */}
+
+            {/* <h1>Pokemon id: {pokemonId.value}</h1>
+            <PokemonImage id={pokemonId.value} /> */}
+
             <h1>Pokemon id: {pokemonId.value}</h1>
-            <PokemonImage id={pokemonId.value} />
+            <PokemonImage
+                id={pokemonGame.pokemonId}
+                isVisible={pokemonGame.isVisible}
+                backImage={pokemonGame.showBackImage}
+            />
         </>
     )
 })
