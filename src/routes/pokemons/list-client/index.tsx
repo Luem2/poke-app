@@ -69,7 +69,6 @@ export default component$(() => {
             <div class='flex flex-col'>
                 <span class='my-5 text-5xl'>Status</span>
                 <span class=''>Pagina actual: {pokemonState.currentPage}</span>
-                <span class=''>Esta cargando:</span>
             </div>
 
             <div class='mt-10'>
