@@ -5,6 +5,7 @@ import {
     routeLoader$,
     useLocation,
 } from '@builder.io/qwik-city'
+import { Modal } from '~/components'
 import { PokemonImage } from '~/components/pokemons/pokemon-image'
 import { getSmallPokemons } from '~/helpers/get-small-pokemons'
 import type { SmallPokemon } from '~/interfaces'
@@ -77,6 +78,20 @@ export default component$(() => {
                     )
                 })}
             </div>
+
+            <Modal>
+                <div q:slot='title'>Nombre del Pokemon</div>
+                <span>Hola mundo</span>
+
+                <div
+                    q:slot='content'
+                    class='flex flex-col justify-center items-center'
+                >
+                    <PokemonImage id={1} />
+
+                    <span>Preguntar a ChatGPT</span>
+                </div>
+            </Modal>
         </>
     )
 })
