@@ -15,10 +15,13 @@ export default component$(() => {
                 </div>
                 <ul class='font-semibold'>
                     <li>
-                        <Link href='/pokemons/list-ssr/'>SSR-List</Link>
+                        <Link href='/pokemons/list-ssr'>SSR-List</Link>
                     </li>
                     <li>
-                        <Link href='/pokemons/list-client/'>Client-List</Link>
+                        <Link href='/pokemons/list-client'>Client-List</Link>
+                    </li>
+                    <li>
+                        <Link href='/counter'>Counter</Link>
                     </li>
                 </ul>
             </div>
