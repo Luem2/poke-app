@@ -1,16 +1,39 @@
-import { Slot, component$, useStylesScoped$ } from '@builder.io/qwik'
+import {
+    type PropFunction,
+    Slot,
+    component$,
+    useStylesScoped$,
+} from '@builder.io/qwik'
 import ModalStyles from './modal.css?inline'
 
 interface Props {
     showModal: boolean
+    closeFn: PropFunction<() => void>
 }
 
-export const Modal = component$(({ showModal }: Props) => {
+export const Modal = component$(({ showModal, closeFn }: Props) => {
     useStylesScoped$(ModalStyles)
 
     return (
-        <div class={showModal ? 'modal-background' : 'hidden'}>
-            <div class='modal-content'>
+        <div
+            //* onClick de abajo si lo usamos con stopPropagation()
+            // onClick$={closeFn}
+
+            id='modal-content' //? Necesario para la primera forma
+            //* Primera forma para evitar que el modal se cierre si apretamos dentro del modal
+            onClick$={(e) => {
+                const target = e.target as HTMLDivElement
+                if (target.id === 'modal-content') closeFn()
+            }}
+            class={showModal ? 'modal-background' : 'hidden'}
+        >
+            <div
+                class='modal-content'
+                //* Segunda forma (STOP PROPAGATION) (PARECE QUE NO TAN RECOMENDADA)
+                // onClick$={(e) => {
+                //     e.stopPropagation()
+                // }}
+            >
                 <div class='mt-3 text-center'>
                     <h3 class='modal-title'>
                         <Slot name='title' />
@@ -24,7 +47,11 @@ export const Modal = component$(({ showModal }: Props) => {
 
                     {/* Botton */}
                     <div class='items-center px-4 py-3'>
-                        <button id='ok-btn' class='modal-button'>
+                        <button
+                            onClick$={closeFn}
+                            id='ok-btn'
+                            class='modal-button'
+                        >
                             Cerrar
                         </button>
                     </div>
