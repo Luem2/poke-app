@@ -1,11 +1,15 @@
 import { Slot, component$, useStylesScoped$ } from '@builder.io/qwik'
 import ModalStyles from './modal.css?inline'
 
-export const Modal = component$(() => {
+interface Props {
+    showModal: boolean
+}
+
+export const Modal = component$(({ showModal }: Props) => {
     useStylesScoped$(ModalStyles)
 
     return (
-        <div class='modal-background'>
+        <div class={showModal ? 'modal-background' : 'hidden'}>
             <div class='modal-content'>
                 <div class='mt-3 text-center'>
                     <h3 class='modal-title'>

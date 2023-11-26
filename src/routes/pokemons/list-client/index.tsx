@@ -1,42 +1,28 @@
-import type { DocumentHead } from '@builder.io/qwik-city'
-// import type { SmallPokemon } from '~/interfaces'
+import { useNavigate, type DocumentHead } from '@builder.io/qwik-city'
 
 import {
     $,
     component$,
     useContext,
     useOnDocument,
-    // useStore,
     useTask$,
 } from '@builder.io/qwik'
 
 import { PokemonImage } from '~/components/pokemons/pokemon-image'
 import { getSmallPokemons } from '~/helpers/get-small-pokemons'
 import { PokemonListContext } from '~/context/pokemon/pokemon-list.context'
-
-// interface PokemonPageState {
-//     currentPage: number
-//     isLoading: boolean
-//     pokemons: SmallPokemon[]
-// }
+import { PokemonGameContext } from '~/context'
 
 export default component$(() => {
     const pokemonState = useContext(PokemonListContext)
+    const pokemonGame = useContext(PokemonGameContext)
+    const nav = useNavigate()
 
-    // const pokemonState = useStore<PokemonPageState>({
-    //     currentPage: 0,
-    //     isLoading: false,
-    //     pokemons: [],
-    // })
+    const goToPokemonPage = $((id: number) => {
+        pokemonGame.pokemonId = id
 
-    // Solo lo ve el cliente
-    // useVisibleTask$(async ({ track }) => {
-    //     // cuando se monta el componente se ejecuta
-    //     track(() => pokemonState.currentPage)
-
-    //     const pokemons = await getSmallPokemons(pokemonState.currentPage * 10)
-    //     pokemonState.pokemons = [...pokemonState.pokemons, ...pokemons]
-    // })
+        nav(`/pokemon/${id}`)
+    })
 
     useTask$(async ({ track }) => {
         track(() => pokemonState.currentPage)
@@ -72,14 +58,6 @@ export default component$(() => {
             </div>
 
             <div class='mt-10'>
-                {/* <button
-                    onClick$={() => {
-                        pokemonState.currentPage--
-                    }}
-                    class='btn btn-primary mr-2'
-                >
-                    Anteriores
-                </button> */}
                 <button
                     onClick$={() => {
                         pokemonState.currentPage++
@@ -95,7 +73,8 @@ export default component$(() => {
                     return (
                         <div
                             key={id}
-                            class='m-5 flex flex-col justify-center items-center'
+                            onClick$={() => goToPokemonPage(+id)}
+                            class='m-5 flex flex-col justify-center items-center cursor-pointer'
                         >
                             <PokemonImage id={+id} />
 

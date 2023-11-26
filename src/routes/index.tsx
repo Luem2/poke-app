@@ -1,6 +1,6 @@
-import type { DocumentHead } from '@builder.io/qwik-city'
+import { useNavigate, type DocumentHead } from '@builder.io/qwik-city'
 
-import { component$ } from '@builder.io/qwik'
+import { $, component$ } from '@builder.io/qwik'
 import { PokemonImage } from '~/components/pokemons/pokemon-image'
 import { usePokemonGame } from '~/hooks/use-pokemon-game'
 
@@ -14,6 +14,11 @@ export default component$(() => {
         toggleFromBack,
         toggleVisible,
     } = usePokemonGame()
+    const nav = useNavigate()
+
+    const goToPokemonPage = $((id: number) => {
+        nav(`/pokemon/${id}`)
+    })
 
     return (
         <>
@@ -23,15 +28,16 @@ export default component$(() => {
                     {pokemonId.value}
                 </span>
 
-                <PokemonImage
-                    id={pokemonId.value}
-                    backImage={showBackImage.value}
-                    isVisible={isVisible.value}
-                    // id={pokemonId.value}
-                    // backImage={showBackImage.value}
-                    // isVisible={isVisible.value}
-                />
-
+                <div
+                    class='cursor-pointer'
+                    onClick$={() => goToPokemonPage(pokemonId.value)}
+                >
+                    <PokemonImage
+                        id={pokemonId.value}
+                        backImage={showBackImage.value}
+                        isVisible={isVisible.value}
+                    />
+                </div>
                 <div class='flex justify-center mt-2'>
                     <button class='btn btn-primary mr-2' onClick$={prevPokemon}>
                         Anterior

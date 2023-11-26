@@ -1,4 +1,4 @@
-import { component$, useComputed$ } from '@builder.io/qwik'
+import { $, component$, useComputed$, useSignal } from '@builder.io/qwik'
 import {
     Link,
     type DocumentHead,
@@ -25,15 +25,22 @@ export const usePokemonList = routeLoader$<SmallPokemon[]>(
 export default component$(() => {
     const pokemons = usePokemonList()
     const location = useLocation()
+    const modalVisible = useSignal(false)
 
     const currentOffset = useComputed$<number>(() => {
-        // const offsetString = location.url.searchParams.get('offset')
         const offsetString = new URLSearchParams(location.url.search)
-
         return Number(offsetString.get('offset') ?? 0)
     })
 
-    console.log(location.url.searchParams.get('offset'))
+    const showModal = $((id: string, name: string) => {
+        console.log('id', id)
+        console.log('name', name)
+        modalVisible.value = true
+    })
+
+    const closeModal = $(() => {
+        modalVisible.value = false
+    })
 
     return (
         <>
@@ -69,6 +76,9 @@ export default component$(() => {
                     return (
                         <div
                             key={id}
+                            onClick$={() => {
+                                showModal(id, name)
+                            }}
                             class='m-5 flex flex-col justify-center items-center'
                         >
                             <PokemonImage id={+id} />
@@ -79,7 +89,7 @@ export default component$(() => {
                 })}
             </div>
 
-            <Modal>
+            <Modal showModal={modalVisible.value}>
                 <div q:slot='title'>Nombre del Pokemon</div>
                 <span>Hola mundo</span>
 

@@ -1,18 +1,11 @@
-import {
-    $,
-    component$,
-    useComputed$,
-    useSignal,
-    useTask$,
-} from '@builder.io/qwik'
-import { useNavigate } from '@builder.io/qwik-city'
-// import { Link } from '@builder.io/qwik-city'
+import { component$, useComputed$, useSignal, useTask$ } from '@builder.io/qwik'
 
 interface Props {
     id: number
     size?: number
     backImage?: boolean
     isVisible?: boolean
+    goPokemonPage?: boolean
 }
 
 export const PokemonImage = component$(
@@ -25,17 +18,11 @@ export const PokemonImage = component$(
                 ? baseUrl.concat(`back/${id}.png`)
                 : baseUrl.concat(`${id}.png`)
         })
-        const nav = useNavigate()
-
         useTask$(({ track }) => {
             // el track sirve para seguir el valor
             track(() => id)
 
             imageLoaded.value = false
-        })
-
-        const goToPokemonPage = $((id: number) => {
-            nav(`/pokemon/${id}`)
         })
 
         return (
@@ -48,30 +35,22 @@ export const PokemonImage = component$(
             >
                 {!imageLoaded.value && <span>Cargando...</span>}
 
-                {/* <Link href={`/pokemon/${id}`}> */}
-
                 <img
                     src={imageUrl.value}
-                    onClick$={() => goToPokemonPage(id)}
                     class={[
                         {
                             'hidden': !imageLoaded.value,
                             'brightness-0': !isVisible,
                         },
                         'transition-all',
-                        'cursor-pointer',
                     ]}
                     alt='Pokemon Sprite'
                     onLoad$={() => {
                         imageLoaded.value = true
-                        // setTimeout(() => {
-                        //     imageLoaded.value = true
-                        // }, 1000)
                     }}
                     width={size}
                     height={size}
                 />
-                {/* </Link> */}
             </div>
         )
     }
